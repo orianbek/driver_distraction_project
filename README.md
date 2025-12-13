@@ -13,5 +13,5 @@ Taking a picture (saving a frame) from the moment you took your eyes off the roa
 
 To be continued..
 
-add a login screen with users database
+add users database
 Work on the UI
