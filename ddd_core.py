@@ -8,8 +8,15 @@ from datetime import datetime
 from ultralytics import YOLO
 import os
 phone_model = None
+RUNNING = False
+
+
 def run_ddd():
+
+    global RUNNING
+    RUNNING = True
     global phone_model
+
     if(phone_model is None):
         phone_model = YOLO("yolov8s.pt")
     
@@ -160,7 +167,8 @@ def run_ddd():
     print(f"[SESSION LOG CREATED] {log_filename}")
 
 
-    while True:
+    while RUNNING:
+       
         ret, frame = cap.read()
         if not ret:
             break
@@ -260,7 +268,6 @@ def run_ddd():
 
 
                 if alert:
-
                     frame = draw_info_panel(frame, "DANGER! INFORMING MANAGER", (0,0,255))
                 else:
                     frame = draw_info_panel(frame, "Driver OK", (0,255,0))
@@ -301,6 +308,8 @@ def run_ddd():
 
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
+        
+
 
     cap.release()
     events_log.close()

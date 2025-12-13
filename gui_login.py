@@ -1,96 +1,86 @@
 import tkinter as tk
 from tkinter import messagebox
-from ddd_core import run_ddd
-import threading
+
+BG = "#1e1e1e"
+PANEL = "#2a2a2a"
+TEXT = "#ffffff"
+ACCENT = "#00bcd4"
+
+login_root = None
 
 USERS = {
     "admin": "1234",
     "manager": "pass"
 }
-def start_monitoring():
-    ddd_thread = threading.Thread(target=run_ddd)
-    ddd_thread.daemon = True   
-    ddd_thread.start()
 
-def attempt_login():
-    username = username_entry.get()
-    password = password_entry.get()
+def start_login():
+    def attempt_login():
+        username = username_entry.get()
+        password = password_entry.get()
 
-    if username in USERS and USERS[username] == password:
-        messagebox.showinfo("Login Success", f"Welcome {username}")
-        open_main_screen()
-    else:
-        messagebox.showerror("Login Failed", "Invalid username or password")
+        if username in USERS and USERS[username] == password:
+            messagebox.showinfo("Login Success", f"Welcome {username}")
+            login_root.withdraw()
 
-def open_main_screen():
-    login_root.destroy()
+            from gui_main import open_main_screen
+            open_main_screen(username,login_root)
+        else:
+            messagebox.showerror("Login Failed", "Invalid username or password")
 
-    main_root = tk.Tk()
-    main_root.title("Driver Distraction Detection")
-    main_root.geometry("400x300")
-    main_root.resizable(False, False)
+    global login_root
+    if login_root is None:
+        login_root = tk.Tk()
+        login_root.title("Login - DDD")
+        login_root.geometry("420x320")
+        login_root.resizable(False, False)
+        login_root.configure(bg=BG)
 
-    title = tk.Label(
-        main_root,
-        text="Driver Distraction Detection",
-        font=("Arial", 16, "bold")
-    )
-    title.pack(pady=20)
+        header = tk.Frame(login_root, bg=PANEL, height=60)
+        header.pack(fill="x")
 
-    start_btn = tk.Button(
-        main_root,
-        text="Start Monitoring",
-        font=("Arial", 12),
-        width=20,
-        command=start_monitoring
-    )
-    start_btn.pack(pady=10)
+        title = tk.Label(
+            header,
+            text="🔐 Driver Distraction Detection",
+            bg=PANEL,
+            fg=TEXT,
+            font=("Segoe UI", 14, "bold")
+        )
+        title.pack(pady=15)
 
-    exit_btn = tk.Button(
-        main_root,
-        text="Exit",
-        font=("Arial", 12),
-        width=20,
-        command=main_root.destroy
-    )
-    exit_btn.pack(pady=10)
+        content = tk.Frame(login_root, bg=BG)
+        content.pack(pady=25)
 
-    main_root.mainloop()
+        tk.Label(content, text="👤 Username", bg=BG, fg=TEXT).pack(anchor="w")
+        username_entry = tk.Entry(content, width=25)
+        username_entry.pack(pady=5)
+
+        tk.Label(content, text="🔑 Password", bg=BG, fg=TEXT).pack(anchor="w")
+        password_entry = tk.Entry(content, show="*", width=25)
+        password_entry.pack(pady=5)
+
+        login_btn = tk.Button(
+            login_root,
+            text="Login ▶",
+            bg=ACCENT,
+            fg="black",
+            width=20,
+            font=("Segoe UI", 11, "bold"),
+            relief="flat",
+            command=attempt_login
+        )
+        login_btn.pack(pady=15)
+
+        footer = tk.Label(
+            login_root,
+            text="program made by orianbek",
+            bg=BG,
+            fg="#888888",
+            font=("Segoe UI", 9)
+        )
+        footer.pack(side="bottom", pady=8)
+
+        login_root.mainloop()
 
 
-login_root = tk.Tk()
-login_root.title("Login - DDD")
-login_root.geometry("400x300")
-login_root.resizable(False, False)
-
-frame = tk.Frame(login_root)
-frame.pack(pady=20)
-
-
-tk.Label(frame, text="Username:").grid(row=0, column=0, pady=5, sticky="e")
-username_entry = tk.Entry(frame)
-username_entry.grid(row=0, column=1, pady=5)
-
-
-tk.Label(frame, text="Password:").grid(row=1, column=0, pady=5, sticky="e")
-password_entry = tk.Entry(frame, show="*")
-password_entry.grid(row=1, column=1, pady=5)
-
-copyrights_title= tk.Label(
-    login_root,
-    text="Program made by orianbek",
-    font=("Arial", 10, "bold")
-)
-copyrights_title.pack(
-    side=tk.BOTTOM
-)
-
-login_btn = tk.Button(
-    login_root,
-    text="Login",
-    width=15,
-    command=attempt_login
-)
-login_btn.pack(pady=10)
-
-login_root.mainloop()
+if __name__ == "__main__":
+    start_login()
