@@ -1,15 +1,25 @@
 import cv2
 import mediapipe as mp
 import numpy as np
-import time
 import math
 import csv
+import time
 from datetime import datetime
 from ultralytics import YOLO
 import os
+from db_manager import insert_event
+
 phone_model = None
 RUNNING = False
+CURRENT_USER = None
 
+def clear_current_user():
+    global CURRENT_USER
+    CURRENT_USER = "None"
+
+def set_current_user(username):
+        global CURRENT_USER 
+        CURRENT_USER = username
 
 def run_ddd():
 
@@ -29,15 +39,16 @@ def run_ddd():
     is_distracted = False
     EAR_THRESHOLD = 0.12      
 
-    total_events = 0
-    eyes_closed_events = 0
-    side_events = 0
-    up_events = 0
-    down_events = 0
-    phone_events = 0
+   ## total_events = 0
+   ## eyes_closed_events = 0
+   ## side_events = 0
+   ## up_events = 0
+   ## down_events = 0
+   ## phone_events = 0
 
 
-    prev_alert = False  
+    prev_alert = False
+  
 
     def draw_info_panel(frame, text, color=(0,255,0)):
         overlay = frame.copy()
@@ -91,7 +102,7 @@ def run_ddd():
         distracting = ["Looking SIDE", "Looking DOWN", "Looking UP","EYES CLOSED","PHONE"]
 
         if state == "EYES CLOSED":
-            DISTRACTION_THRESHOLD = 2.5 
+            DISTRACTION_THRESHOLD = 1.5 
         elif state == "PHONE":
             DISTRACTION_THRESHOLD = 1.2       
         else:
@@ -240,7 +251,7 @@ def run_ddd():
                 alert = time_based_check(driver_state)
 
                 if alert and not prev_alert:
-
+                    insert_event(CURRENT_USER,driver_state)
                     timestamp = datetime.now().strftime("%H:%M:%S.%f")[:-3]
                     events_writer.writerow([timestamp, driver_state])
                     print(f"[EVENT LOGGED] {timestamp} - {driver_state}")
@@ -252,16 +263,16 @@ def run_ddd():
 
                     total_events += 1
 
-                    if driver_state == "EYES CLOSED":
-                        eyes_closed_events += 1
-                    elif driver_state == "Looking SIDE":
-                        side_events += 1
-                    elif driver_state == "Looking UP":
-                        up_events += 1
-                    elif driver_state == "Looking DOWN":
-                        down_events += 1
-                    elif driver_state == "PHONE":
-                        phone_events += 1    
+                ##    if driver_state == "EYES CLOSED":
+                ##        eyes_closed_events += 1
+                ##    elif driver_state == "Looking SIDE":
+                ##        side_events += 1
+                ##    elif driver_state == "Looking UP":
+                ##        up_events += 1
+                ##    elif driver_state == "Looking DOWN":
+                ##        down_events += 1
+                ##    elif driver_state == "PHONE":
+                ##        phone_events += 1    
 
                 prev_alert = alert
 
@@ -304,13 +315,11 @@ def run_ddd():
     #                      cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0,255,0), 2)
 
 
-        cv2.imshow("Head Pose ", frame)
+        cv2.imshow("Driver-Distraction-Detection program", frame)
 
         if cv2.waitKey(1) & 0xFF == ord('q'):
             break
         
-
-
     cap.release()
     events_log.close()
     cv2.destroyAllWindows()

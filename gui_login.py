@@ -1,5 +1,7 @@
 import tkinter as tk
 from tkinter import messagebox
+from db_manager import check_login
+from ddd_core import set_current_user
 
 BG = "#1e1e1e"
 PANEL = "#2a2a2a"
@@ -8,24 +10,25 @@ ACCENT = "#00bcd4"
 
 login_root = None
 
-USERS = {
-    "admin": "1234",
-    "manager": "pass"
-}
+
 
 def start_login():
     def attempt_login():
         username = username_entry.get()
         password = password_entry.get()
 
-        if username in USERS and USERS[username] == password:
+        role = check_login(username,password)
+
+        if role :
             messagebox.showinfo("Login Success", f"Welcome {username}")
+            set_current_user(username)
             login_root.withdraw()
 
             from gui_main import open_main_screen
-            open_main_screen(username,login_root)
+            open_main_screen(username,role, login_root)
         else:
             messagebox.showerror("Login Failed", "Invalid username or password")
+
 
     global login_root
     if login_root is None:
