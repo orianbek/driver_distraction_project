@@ -13,5 +13,4 @@ Taking a picture (saving a frame) from the moment you took your eyes off the roa
 
 To be continued..
 
-add users database
-Work on the UI
+add users database and premissions
