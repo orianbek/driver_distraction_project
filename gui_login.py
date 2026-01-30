@@ -23,7 +23,6 @@ def start_login():
             messagebox.showinfo("Login Success", f"Welcome {username}")
             set_current_user(username)
             login_root.withdraw()
-
             from gui_main import open_main_screen
             open_main_screen(username,role, login_root)
         else:

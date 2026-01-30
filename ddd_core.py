@@ -139,7 +139,7 @@ def run_ddd():
                 conf = float(box.conf[0])
 
 
-                if cls == 67 and conf > 0.45:
+                if cls == 67 and conf > 0.55:
                     phone_detected = True
 
 
@@ -261,7 +261,7 @@ def run_ddd():
                     cv2.imwrite(pic_path, frame)
                     print(f"[IMAGE SAVED] {filename}")
 
-                    total_events += 1
+                   ## total_events += 1
 
                 ##    if driver_state == "EYES CLOSED":
                 ##        eyes_closed_events += 1
