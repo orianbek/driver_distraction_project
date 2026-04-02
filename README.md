@@ -67,4 +67,7 @@ At its core, the system:
 
 📸 Examples
 
-Screenshots and images LATER
+![login_orian](https://github.com/user-attachments/assets/ec79a125-0ce6-451c-843f-0a06c25d8c16)
+![main_gui_admin](https://github.com/user-attachments/assets/dbc2d2bd-f470-4f7e-a88d-54a95300e136)
+![log_db](https://github.com/user-attachments/assets/c85b6bea-1d4f-43a4-ae35-dd2d73de13ef)
+
