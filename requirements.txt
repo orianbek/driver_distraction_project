@@ -5,3 +5,7 @@ opencv-python
 pillow
 jupyterlab
 ipython
+opencv-python
+mediapipe
+ultralytics
+numpy==1.26.4
