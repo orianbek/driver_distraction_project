@@ -50,17 +50,25 @@ At its core, the system:
 
 ## ⚙️ Setup & Installation
 
+## Installation
+
+Recommended Python version: **Python 3.11**
+
+> Do not use Python 3.14, because MediaPipe may not work correctly.
+
+
 1. Clone the repo:
    ```bash
    git clone https://github.com/orianbek/driver_distraction_project.git
 
 2. Create a virtual environment:
    ```bash
-    python -m venv venv
+    py -3.11 -m venv venv
     source venv/bin/activate  # Windows: venv\Scripts\activate
 
 4. Install dependencies:
    ```bash
+   python -m pip install --upgrade pip
    pip install -r requirements.txt
    
 6. Make sure your webcam is connected and accessible.
